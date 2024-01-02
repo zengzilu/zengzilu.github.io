@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>Hugo Theme Next 配置指南</title><url>/post/hugo-theme-next-settings/</url><categories><category>programmer</category></categories><tags><tag>blog</tag><tag>hugo</tag><tag>next</tag></tags><content type="html"><![CDATA[  hugo next风格blog搭建之后，可能想要对默认的页面做调整，比如作者信息，图标，侧边栏，底部状态等。多数情况下config.yaml中都有对应配置项。 但是next自己似乎没有展开介绍此部分，需要自己摸索。 这里结合个人的修改实操介绍一下各部分的修改方式。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>Golang Migration</title><url>/post/golang-migration/</url><categories><category>programmer</category></categories><tags><tag>golang</tag><tag>database</tag><tag>migration</tag></tags><content type="html"><![CDATA[  一个项目长期运行，一定设计到数据库表的迭代升级，尤其是在多环境交付的模式下，清晰严格的版本数据库设计升降机管理显得尤为必要。在go语言下有相关工具go migration来完成相关工作。
+go migration 可以做什么 管理版本sql 将db table升级到指定版本 将db table降级到指定版本 支持mysql，postgresql, sqlLite, MariaDB, MongoDB等主流数据库 支持命令行与SDK两种执行方式 安装 git clone git@github.com:golang-migrate/migrate.git
+cd migrate; make build
+mv migrate /usr/local/bin
+使用介绍 创建版本sql migrate create -ext sql -dir database/migration/ -seq init_mg
+-ext 文件格式 -dir sql目录 -seq 序列号 版本格式如下
+000001_init_mg.up.sql // 1版本的升级sql 000001_init_mg.down.sql // 1版本的降级sql 执行变更到DB 升级到最新版migrate -path database/migration/ -database &quot;mysql://{user}:{passwd}@localhost:3306/{dbname}&quot; -verbose up
+升级N个版本migrate -path database/migration/ -database &quot;mysql://{user}:{passwd}@localhost:3306/{dbname}&quot; -verbose up {N}
+降级N个版本migrate -path database/migration/ -database &quot;mysql://{user}:{passwd}@localhost:3306/{dbname}&quot; -verbose down {N}
+直接升降级到指定版本migrate -path database/migration/ -database &quot;mysql://root:123456@tcp(127.0.0.1:3306)/vc&quot; -verbose goto 2
+migration的实现逻辑如何 在官方的介绍里，有一张图如下。就是这么简单 在使用migrate的过程中，用户做的事情是
+创建版本sql文件，文件名格式符合migrate格式 维护版本之间的升降级sql migrate做的事情是
+按照文件名识别sql的版本序列 按照用户预期的目标版本顺序执行升降级sql 将当前的sql版本记录在服务db的schema_migrations表中 总结 migration的实现思路并不复杂，工具的目标是协助解决版本迭代时sql升降级顺利。
+golang migration使用文件名来识别版本，当一个版本sql变更较多时可能导致sql文件臃肿。其他类似服务有些支持以目录为版本粒度，对sql较多的大型项目更加友好。
+migration只是一个执行器，软件的sql升降级实际能否顺利最终依赖up.sql和down.sql的维护策略，对于良好的维护策略应该做到以下几点
+sql的重入考虑，create table / drop table 时判断table是否存在 对历史版本 只读特性 的严格支持 对于多db实例的sql语法兼容 对于删改操作的谨慎执行，可以考虑软删除策略   ]]></content></entry><entry><title>Hugo Theme Next 配置指南</title><url>/post/hugo-theme-next-settings/</url><categories><category>programmer</category></categories><tags><tag>blog</tag><tag>hugo</tag><tag>next</tag></tags><content type="html"><![CDATA[  hugo next风格blog搭建之后，可能想要对默认的页面做调整，比如作者信息，图标，侧边栏，底部状态等。多数情况下config.yaml中都有对应配置项。 但是next自己似乎没有展开介绍此部分，需要自己摸索。 这里结合个人的修改实操介绍一下各部分的修改方式。
 基本信息 只需要在config.yaml中修改字段即可，属性与字段的关系如下
 网站title：.title 作者：.params.author 两个子标题分别是 .params.subtitle和.params.description icon：.params.favicon 作者头像：.params.avatar.url 菜单调整 在首页的菜单默认有&amp;quot;首页&amp;quot;，&amp;ldquo;关于&amp;rdquo;，&amp;ldquo;站点示例&amp;rdquo;，&amp;ldquo;归档&amp;rdquo;，&amp;ldquo;公益&amp;quot;5个选项 如果想关闭部分菜单，可以在 .menus.main数组下面注释掉对应项
 页面风格 next theme下有4种内置风格可选，分别是Muse，Mist，Pisces，Gemini。 这部分在next的首页有介绍，设置.params.scheme字段即可
