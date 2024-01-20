@@ -1,4 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>Golang Migration</title><url>/post/golang-migration/</url><categories><category>programmer</category></categories><tags><tag>golang</tag><tag>database</tag><tag>migration</tag></tags><content type="html"><![CDATA[  一个项目长期运行，一定设计到数据库表的迭代升级，尤其是在多环境交付的模式下，清晰严格的版本数据库设计升降机管理显得尤为必要。在go语言下有相关工具go migration来完成相关工作。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>Restore Your Iphone</title><url>/post/restore-your-iphone/</url><categories><category>other</category></categories><tags><tag>iphone</tag></tags><content type="html"> 当iphone不再由你个人使用时，是否担心他人会从iphone上获取你的隐私信息，冒用你的身份，或者遗留了设备信息导致apple账户的脏数据？
+本文根据实际经验完整介绍在交出旧iphone前，你应该做哪些事情
+1. 取消配对并抹掉 Apple Watch Apple官网上有完整： Apple Watch抹除图文参考 2. 关闭查找我的iphone 在旧手机中通过如下路径关闭旧iphone的查找，完毕之后，设备的位置不会上报到你的appleID账号下 可以在 findMy 中验证设备是否可达
+操作路径：设置 - AppleID - 查找 - 查找我的iPhone - 关闭查找我的iphone
+3. 退出iCloud，iTunes Store 和 AppStore 退出AppleID
+操作路径：设置 - AppleID - （划到最下方）退出登录。
+注意在保留副本确认页面不要保留任何数据，如果需要可以单独备份到其他设备
+4. 还原设备（格式化） 过程中将删除个人下载的APP，重置手机设置。 完成后手机将进入初始化流程，也就是新机设置流程
+操作路径：设置 - 通用 - 传输与还原iPhone - 抹掉所有内容和设置
+5. 在iCloud账户中移除旧设备 登录Apple find findMy ，将旧设备移除账户，之后整个restore任务完成</content></entry><entry><title>Golang Migration</title><url>/post/golang-migration/</url><categories><category>programmer</category></categories><tags><tag>golang</tag><tag>database</tag><tag>migration</tag></tags><content type="html"><![CDATA[  一个项目长期运行，一定设计到数据库表的迭代升级，尤其是在多环境交付的模式下，清晰严格的版本数据库设计升降机管理显得尤为必要。在go语言下有相关工具go migration来完成相关工作。
 go migration 可以做什么 管理版本sql 将db table升级到指定版本 将db table降级到指定版本 支持mysql，postgresql, sqlLite, MariaDB, MongoDB等主流数据库 支持命令行与SDK两种执行方式 安装 git clone git@github.com:golang-migrate/migrate.git
 cd migrate; make build
 mv migrate /usr/local/bin
